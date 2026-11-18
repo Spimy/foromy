@@ -13,7 +13,7 @@ test:
 
 migration:
 	$(if $(name),,$(error Usage: make migration name=MigrationName))
-	$(EF) migrations add $(name) --output-dir Data/Migrations
+	$(EF) migrations add $(name) --output-dir Persistence/Migrations
 
 migrate:
 	$(EF) database update
