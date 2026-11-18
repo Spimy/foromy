@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ForoMy.Core/ForoMy.Core.csproj" />
+    <Project Path="src/ForoMy.Infrastructure/ForoMy.Infrastructure.csproj" />
+    <Project Path="src/ForoMy.Web/ForoMy.Web.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,39 @@
+name: foromy-dev
+
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu
+    volumes:
+      - ../..:/workspaces:cached
+      # Keeps `dotnet user-secrets` across container rebuilds.
+      - usersecrets:/home/vscode/.microsoft/usersecrets
+    command: sleep infinity
+    network_mode: service:db
+    depends_on:
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: Developer
+      # Throwaway local password (same approach as Microsoft's .NET + SQL template).
+      MSSQL_SA_PASSWORD: "Dev_Passw0rd!"
+    volumes:
+      - db-data:/var/opt/mssql
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    restart: unless-stopped
+    command: ["azurite-blob", "--blobHost", "0.0.0.0", "--location", "/data", "--skipApiVersionCheck", "--loose"]
+    network_mode: service:db
+    depends_on:
+      - db
+    volumes:
+      - azurite-data:/data
+
+volumes:
+  db-data:
+  azurite-data:
+  usersecrets:

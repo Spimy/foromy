@@ -1,0 +1,46 @@
+{
+  "name": "ForoMy (.NET + SQL Server + Azurite)",
+  "dockerComposeFile": "compose.yaml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "shutdownAction": "stopCompose",
+
+  "features": {
+    "ghcr.io/devcontainers/features/dotnet:2": {
+      "version": "10.0"
+    },
+    // Use your machine's Docker from inside the container (lighter than docker-in-docker).
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+
+  "containerEnv": {
+    "DOTNET_CLI_TELEMETRY_OPTOUT": "1",
+    "DOTNET_WATCH_SUPPRESS_LAUNCH_BROWSER": "1"
+  },
+
+  // Runs once after the container is created.
+  "postCreateCommand": "sudo chown -R vscode:vscode /home/vscode/.microsoft && dotnet tool restore",
+
+  // SQL Server and Azurite, reachable from Windows (SSMS, Storage Explorer) on localhost.
+  "forwardPorts": [1433, 10000],
+  "portsAttributes": {
+    "1433": { "label": "SQL Server" },
+    "10000": { "label": "Azurite Blob" }
+  },
+
+  "remoteUser": "vscode",
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/home/vscode/.dotnet/tools"
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "ms-mssql.mssql",
+        "ms-azuretools.vscode-docker",
+        "humao.rest-client"
+      ]
+    }
+  }
+}
