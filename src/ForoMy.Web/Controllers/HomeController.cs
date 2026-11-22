@@ -1,15 +1,28 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ForoMy.Web.Models;
+using ForoMy.Core.Common.Interfaces;
+using ForoMy.Core.Forums;
+using ForoMy.Infrastructure.Persistence;
 
 namespace ForoMy.Web.Controllers;
 
-public class HomeController(ILogger<HomeController> logger) : Controller
+public class HomeController(ICurrentForum currentForum, ForoMyDbContext dbContext) : Controller
 {
     public IActionResult Index()
     {
-        logger.LogInformation("Hopepage reached!");
-        return View();
+        if (currentForum.ForumId is null)
+        {
+            return View(new HomeViewModel());
+        }
+
+        var forum = dbContext.Forums.Where(forum => forum.Id == currentForum.ForumId).FirstOrDefault();
+        if (forum is null)
+        {
+            return NotFound();
+        }
+
+        return View(new HomeViewModel { ForumName = forum.Name });
     }
 
     public IActionResult Privacy()
