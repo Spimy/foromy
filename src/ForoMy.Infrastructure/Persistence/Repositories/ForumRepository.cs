@@ -7,7 +7,7 @@ namespace ForoMy.Infrastructure.Persistence.Repositories;
 
 internal sealed class ForumRepository(ForoMyDbContext dbContext) : IForumRepository
 {
-  public Task<Guid?> FindIdBySubdomain(string subdomain, CancellationToken cancellationToken = default)
+  public Task<Guid?> FindIdBySubdomainAsync(string subdomain, CancellationToken cancellationToken = default)
   {
     return dbContext.Forums
       .Where(forum => forum.Subdomain == subdomain)
