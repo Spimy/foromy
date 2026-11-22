@@ -1,3 +1,4 @@
+using ForoMy.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,7 @@ internal static class PersistenceServiceCollectionExtensions
       }
     });
 
+    services.AddRepositories();
     return services;
   }
 }
