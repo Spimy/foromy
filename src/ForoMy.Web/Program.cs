@@ -1,5 +1,6 @@
 using ForoMy.Core;
 using ForoMy.Infrastructure;
+using ForoMy.Infrastructure.Persistence.Seeding;
 using ForoMy.Web.ForumResolution;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,11 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+}
+
+if (app.Environment.IsDevelopment())
+{
+    await app.Services.SeedDevelopmentDataAsync(app.Lifetime.ApplicationStopping);
 }
 
 app.UseHttpsRedirection();
