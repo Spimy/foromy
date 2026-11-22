@@ -1,5 +1,6 @@
 using ForoMy.Core;
 using ForoMy.Infrastructure;
+using ForoMy.Web.ForumResolution;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddCore();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddForumResolution(builder.Configuration);
 
 var app = builder.Build();
 
@@ -20,6 +22,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseForumResolution();
 
 app.UseAuthentication();
 app.UseAuthorization();

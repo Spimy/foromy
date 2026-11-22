@@ -1,0 +1,37 @@
+using ForoMy.Core.Forums;
+using Microsoft.Extensions.Options;
+
+namespace ForoMy.Web.ForumResolution;
+
+internal sealed class ForumResolutionMiddleware(
+  IOptions<ForumOptions> options,
+  CurrentForum currentForum,
+  IForumRepository forums
+) : IMiddleware
+{
+  private readonly string _suffix = $".{options.Value.BaseDomain}";
+
+  public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+  {
+    var host = context.Request.Host.Host.ToLowerInvariant();
+    if (!host.EndsWith(_suffix, StringComparison.OrdinalIgnoreCase))
+    {
+      context.Response.StatusCode = StatusCodes.Status404NotFound;
+      return;
+    }
+
+    // cut off the suffix from the string
+    // e.g. suffix = .example.com => subdomain.example.com -> subdomain
+    var subdomain = host[..^_suffix.Length];
+
+    var forumId = await forums.FindIdBySubdomainAsync(subdomain, context.RequestAborted);
+    if (forumId is null)
+    {
+      context.Response.StatusCode = StatusCodes.Status404NotFound;
+      return;
+    }
+
+    currentForum.ForumId = forumId;
+    await next(context);
+  }
+}
