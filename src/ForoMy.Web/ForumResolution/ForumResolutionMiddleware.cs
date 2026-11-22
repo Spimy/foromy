@@ -9,12 +9,19 @@ internal sealed class ForumResolutionMiddleware(
   IForumRepository forums
 ) : IMiddleware
 {
-  private readonly string _suffix = $".{options.Value.BaseDomain}";
+  private readonly string _baseDomain = options.Value.BaseDomain.ToLowerInvariant();
+  private string Suffix => $".{_baseDomain}";
 
   public async Task InvokeAsync(HttpContext context, RequestDelegate next)
   {
     var host = context.Request.Host.Host.ToLowerInvariant();
-    if (!host.EndsWith(_suffix, StringComparison.OrdinalIgnoreCase))
+    if (host == _baseDomain)
+    {
+      await next(context);
+      return;
+    }
+
+    if (!host.EndsWith(Suffix, StringComparison.Ordinal))
     {
       context.Response.StatusCode = StatusCodes.Status404NotFound;
       return;
@@ -22,7 +29,7 @@ internal sealed class ForumResolutionMiddleware(
 
     // cut off the suffix from the string
     // e.g. suffix = .example.com => subdomain.example.com -> subdomain
-    var subdomain = host[..^_suffix.Length];
+    var subdomain = host[..^Suffix.Length];
 
     var forumId = await forums.FindIdBySubdomainAsync(subdomain, context.RequestAborted);
     if (forumId is null)
