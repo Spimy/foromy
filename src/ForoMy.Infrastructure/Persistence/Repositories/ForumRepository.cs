@@ -1,17 +1,16 @@
 using ForoMy.Core.Entities;
 using ForoMy.Core.Forums;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ForoMy.Infrastructure.Persistence.Repositories;
 
 internal sealed class ForumRepository(ForoMyDbContext dbContext) : IForumRepository
 {
-  public Task<Guid?> FindIdBySubdomainAsync(string subdomain, CancellationToken cancellationToken = default)
+  public Task<ForumInfo?> FindInfoBySubdomainAsync(string subdomain, CancellationToken cancellationToken = default)
   {
     return dbContext.Forums
       .Where(forum => forum.Subdomain == subdomain)
-      .Select(forum => (Guid?)forum.Id)
+      .Select(forum => new ForumInfo(forum.Id, forum.Name, forum.Subdomain, forum.CreatedAt, forum.UpdatedAt))
       .FirstOrDefaultAsync(cancellationToken);
   }
 

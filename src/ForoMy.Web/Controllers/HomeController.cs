@@ -1,20 +1,15 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ForoMy.Web.Models;
-using ForoMy.Core.Forums;
 using ForoMy.Core.Common.Interfaces;
 
 namespace ForoMy.Web.Controllers;
 
-public class HomeController(IForumRepository forumRepository, ICurrentForum currentForum) : Controller
+public class HomeController(ICurrentForum currentForum) : Controller
 {
-    public async Task<IActionResult> Index(CancellationToken cancellationToken)
+    public IActionResult Index()
     {
-        if (currentForum.ForumId is not { } forumId) return NotFound();
-
-        var forum = await forumRepository.FindByIdAsync(forumId, cancellationToken);
-        if (forum is null) return NotFound();
-
+        if (currentForum.Forum is not { } forum) return NotFound();
         return View(new HomeViewModel { ForumName = forum.Name });
     }
 

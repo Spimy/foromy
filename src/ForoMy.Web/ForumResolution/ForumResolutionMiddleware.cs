@@ -31,14 +31,14 @@ internal sealed class ForumResolutionMiddleware(
     // e.g. suffix = .example.com => subdomain.example.com -> subdomain
     var subdomain = host[..^Suffix.Length];
 
-    var forumId = await forums.FindIdBySubdomainAsync(subdomain, context.RequestAborted);
-    if (forumId is null)
+    var forumInfo = await forums.FindInfoBySubdomainAsync(subdomain, context.RequestAborted);
+    if (forumInfo is null)
     {
       context.Response.StatusCode = StatusCodes.Status404NotFound;
       return;
     }
 
-    currentForum.ForumId = forumId;
+    currentForum.Forum = forumInfo;
     await next(context);
   }
 }

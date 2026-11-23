@@ -1,8 +1,9 @@
 using ForoMy.Core.Common.Interfaces;
+using ForoMy.Core.Forums;
 
 namespace ForoMy.Web.ForumResolution;
 
 internal sealed class CurrentForum : ICurrentForum
 {
-  public Guid? ForumId { get; set; }
+  public ForumInfo? Forum { get; set; }
 }
