@@ -15,6 +15,11 @@ internal sealed class ForumRepository(ForoMyDbContext dbContext) : IForumReposit
       .FirstOrDefaultAsync(cancellationToken);
   }
 
+  public Task<Forum?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
+  {
+    return dbContext.Forums.FirstOrDefaultAsync(forum => forum.Id == id, cancellationToken);
+  }
+
   public Task<bool> SubdomainExistsAsync(string subdomain, CancellationToken cancellationToken = default)
   {
     return dbContext.Forums.AnyAsync(forum => forum.Subdomain == subdomain, cancellationToken);
