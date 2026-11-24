@@ -11,6 +11,14 @@ internal static class ForumResolutionEndpointRouteBuilderExtensions
       .Value.BaseDomain;
 
     endpoints.MapAreaControllerRoute(
+      name: "error",
+      areaName: "Landing",
+      pattern: "error",
+      defaults: new { controller = "Home", action = "Error" }
+    )
+    .WithStaticAssets();
+
+    endpoints.MapAreaControllerRoute(
       name: "landing",
       areaName: "Landing",
       pattern: "{controller=Home}/{action=Index}/{id?}"

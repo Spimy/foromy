@@ -1,4 +1,4 @@
-namespace ForoMy.Web.Models;
+namespace ForoMy.Web.Areas.Landing.Models;
 
 public class ErrorViewModel
 {
