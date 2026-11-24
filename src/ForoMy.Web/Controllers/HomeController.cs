@@ -13,11 +13,6 @@ public class HomeController(ICurrentForum currentForum) : Controller
         return View(new HomeViewModel { ForumName = forum.Name });
     }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
