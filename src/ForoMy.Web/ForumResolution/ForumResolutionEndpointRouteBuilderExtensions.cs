@@ -13,14 +13,14 @@ internal static class ForumResolutionEndpointRouteBuilderExtensions
     endpoints.MapAreaControllerRoute(
       name: "landing",
       areaName: "Landing",
-      pattern: "{Controller=Home}/{action=Index}/{Id?}"
+      pattern: "{controller=Home}/{action=Index}/{id?}"
     )
     .RequireHost(baseDomain)
     .WithStaticAssets();
 
     endpoints.MapControllerRoute(
       name: "default",
-      pattern: "{Controller=Home}/{action=Index}/{Id?}"
+      pattern: "{controller=Home}/{action=Index}/{id?}"
     )
     .RequireHost($"*.{baseDomain}")
     .WithStaticAssets();
