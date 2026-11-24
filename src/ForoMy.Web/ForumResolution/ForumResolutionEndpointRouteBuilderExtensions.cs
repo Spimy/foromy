@@ -19,6 +19,14 @@ internal static class ForumResolutionEndpointRouteBuilderExtensions
     .WithStaticAssets();
 
     endpoints.MapAreaControllerRoute(
+      name: "privacy",
+      areaName: "Landing",
+      pattern: "privacy",
+      defaults: new { controller = "Home", action = "Privacy" }
+    )
+    .WithStaticAssets();
+
+    endpoints.MapAreaControllerRoute(
       name: "landing",
       areaName: "Landing",
       pattern: "{controller=Home}/{action=Index}/{id?}"
