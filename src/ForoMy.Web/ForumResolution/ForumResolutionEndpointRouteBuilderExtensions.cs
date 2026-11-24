@@ -1,5 +1,6 @@
-using ForoMy.Web.ForumResolution;
 using Microsoft.Extensions.Options;
+
+namespace ForoMy.Web.ForumResolution;
 
 internal static class ForumResolutionEndpointRouteBuilderExtensions
 {
