@@ -1,4 +1,5 @@
 using ForoMy.Core.Forums;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.Extensions.Options;
 
 namespace ForoMy.Web.ForumResolution;
@@ -14,6 +15,12 @@ internal sealed class ForumResolutionMiddleware(
 
   public async Task InvokeAsync(HttpContext context, RequestDelegate next)
   {
+    if (context.Features.Get<IExceptionHandlerFeature>() is not null)
+    {
+      await next(context);
+      return;
+    }
+
     var host = context.Request.Host.Host.ToLowerInvariant();
     if (host == _baseDomain)
     {
